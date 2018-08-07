@@ -20,3 +20,6 @@ class Configuration(object):
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
     JWT_AUTH_URL_RULE = None
     JWT_EXPIRATION_DELTA = timedelta(days=7)  # token expired in 1 weeks
+
+    # APP SECRET KEY
+    APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")

@@ -4,6 +4,9 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 
+from flask_jwt import current_identity, jwt_required
+
+from settings.decorator import secret_key_required
 from controller import BeritaController
 from exceptions import BadRequest
 
@@ -12,9 +15,9 @@ beritaController = BeritaController()
 bp = Blueprint(__name__, "berita")
 
 @bp.route("/berita", methods=["GET"])
+@jwt_required()
 def get_berita():
     berita_type = request.args.get("type")
-    print(berita_type)
 
     if not berita_type:
         raise BadRequest("type is required", 200, 1)
@@ -26,10 +29,9 @@ def get_berita():
     return jsonify(response)
 
 @bp.route("/berita", methods=["POST"])
+@jwt_required()
 def create_berita():
     berita_object = request.form.get("berita_object")
-    #berita_object = request.data
-    #print(berita_object)
 
     try:
         berita_object_json = json.loads(berita_object)
@@ -61,6 +63,8 @@ def create_berita():
     return jsonify(response)
 
 @bp.route("/berita/<berita_slug>", methods=["GET"])
+@jwt_required()
+@secret_key_required()
 def get_single_berita(berita_slug):
     berita_type = request.args.get("type")
 
@@ -74,6 +78,7 @@ def get_single_berita(berita_slug):
     return jsonify(response)
 
 @bp.route("/berita/<berita_id>", methods=["PUT"])
+@jwt_required()
 def update_single_berita(berita_id):
     berita_object = request.form.get("berita_object")
 
@@ -89,6 +94,7 @@ def update_single_berita(berita_id):
     return jsonify(response)
 
 @bp.route("/berita/<berita_id>", methods=["DELETE"])
+@jwt_required()
 def delete_single_berita(berita_id):
     beritaController.delete_berita(berita_id)
 

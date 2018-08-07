@@ -4,12 +4,12 @@ from bson.objectid import ObjectId
 class Berita(object):
     filter_param = dict
 
-    def get_all(self, is_deleted=False, type=None):
+    def get_all(self, is_deleted=False, _type=None):
         try:
             result = list(
                 db.db.berita.find({
                     "is_deleted": is_deleted,
-                    "type": type,
+                    "type": _type,
                 }))
         except:
             result = []
